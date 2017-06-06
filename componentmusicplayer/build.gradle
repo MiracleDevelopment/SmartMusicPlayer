@@ -31,27 +31,31 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
-ext {
-    bintrayRepo = 'MusicPlayer'
-    bintrayName = 'MusicPlayer'
 
-    publishedGroupId = 'com.ipati.Music'
+ext {
+    bintrayRepo = 'testRepo'
+    bintrayName = 'MusiPlayer'
+
+    publishedGroupId = 'com.miraclelab'
     libraryName = 'MusicPlayer'
     artifact = 'MusicPlayer'
 
     libraryDescription = 'A wrapper for Facebook Native Like Button (LikeView) on Android'
 
-    siteUrl = 'https://github.com/nuuneoi/FBLikeAndroid'
-    gitUrl = 'https://github.com/nuuneoi/FBLikeAndroid.git'
+    siteUrl = 'https://github.com/MiracleDevelopment/JCenterTest'
+    gitUrl = 'https://github.com/MiracleDevelopment/JCenterTest.git'
 
-    libraryVersion = '0.9.3'
+    libraryVersion = '0.1.1'
 
-    developerId = 'nuuneoi'
-    developerName = 'Sittiphol Phanvilai'
-    developerEmail = 'sittiphol@gmail.com'
+    developerId = 'patipan2539'
+    developerName = 'Patipan Injai'
+    developerEmail = 'patipan2539@gmail.com'
 
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
 }
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

@@ -1,18 +1,23 @@
-package com.dev.ipati.componentmusicplayer;
+package com.dev.ipati.smartMusicPlayerLibrary;
 
 import android.content.Context;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.dev.ipati.componentmusicplayer.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by ipati on 6/6/2560.
- */
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
     private MediaPlayer mMediaPlayer;
@@ -22,6 +27,7 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
     private Uri path;
     private int index;
 
+    //Todo:Single Player
     public SmartMediaPlayer(Context mContext, MediaPlayer mp, Integer startAtMusic) {
         this.mContextListener = mContext;
         this.mMediaPlayer = mp;
@@ -29,6 +35,7 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
         onStandByListener();
     }
 
+    //Todo:MultiPlayer
     public SmartMediaPlayer(Context mContext, MediaPlayer mp, ArrayList<Integer> Raw) {
         this.mContextListener = mContext;
         this.mMediaPlayer = mp;
@@ -36,6 +43,7 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
         onStandByListener();
     }
 
+    //Todo:Loading Standby
     private void onStandByListener() {
         if (mRaw != null) {
             path = Uri.parse("android.resource://" + mContextListener.getPackageName() + "/" + mRaw);
@@ -46,6 +54,33 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
             mMediaPlayer = MediaPlayer.create(mContextListener, path);
         }
 
+    }
+
+    //Todo:ImageCoverDiskGlide
+    public void setBitmapImageCover(Context mContext, int placeHolder, ImageView imCover, boolean cropCircleImage) {
+        MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+        mRetriever.setDataSource(mContext, path);
+        byte[] imByte = mRetriever.getEmbeddedPicture();
+        if (imCover.getDrawable() == null) {
+            if (!cropCircleImage) {
+                Glide.with(mContext)
+                        .load(imByte)
+                        .placeholder(placeHolder)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(imCover);
+            } else {
+                setBitmapImageCoverCircle(mContext, placeHolder, imCover, imByte);
+            }
+        }
+    }
+
+    private void setBitmapImageCoverCircle(Context mContext, int placeHolder, ImageView imCover, byte[] byteImage) {
+        Glide.with(mContext).load(byteImage).centerCrop()
+                .crossFade()
+                .bitmapTransform(new CropCircleTransformation(mContext))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(placeHolder)
+                .into(imCover);
     }
 
     @Override

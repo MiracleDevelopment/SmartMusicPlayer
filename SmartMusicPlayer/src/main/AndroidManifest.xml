@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dev.ipati.componentmusicplayer">
 
-    <application></application>
+    <application>
+        <meta-data
+            android:name="com.dev.ipati.smartMusicPlayerLibrary.GlideModule"
+            android:value="GlideModule">
+
+        </meta-data>
+    </application>
 
 </manifest>

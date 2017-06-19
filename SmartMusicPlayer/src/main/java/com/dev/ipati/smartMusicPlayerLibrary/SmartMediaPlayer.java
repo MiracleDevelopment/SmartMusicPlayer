@@ -1,19 +1,23 @@
 package com.dev.ipati.smartMusicPlayerLibrary;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
-import com.dev.ipati.componentmusicplayer.R;
 
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,7 +26,10 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
     private MediaPlayer mMediaPlayer;
     private Context mContextListener;
+    private Activity mActivity;
     private ArrayList<Integer> mRawList;
+    private File fileMusic;
+    private File[] listFileMusic;
     private Integer mRaw;
     private Uri path;
     private int index;
@@ -43,15 +50,40 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
         onStandByListener();
     }
 
+    //Todo:PlayeSigleMusic
+    public SmartMediaPlayer(Context mContext, MediaPlayer mp, File fileMusic) {
+        this.mContextListener = mContext;
+        this.mMediaPlayer = mp;
+        this.fileMusic = fileMusic;
+        onStandByListener();
+    }
+
+    //Todo:MultiPlayerInDevice
+    public SmartMediaPlayer(Context mContext, MediaPlayer mp, File[] listFileMusic) {
+        this.mContextListener = mContext;
+        this.mMediaPlayer = mp;
+        this.listFileMusic = listFileMusic;
+        onStandByListener();
+    }
+
     //Todo:Loading Standby
     private void onStandByListener() {
         if (mRaw != null) {
             path = Uri.parse("android.resource://" + mContextListener.getPackageName() + "/" + mRaw);
             mMediaPlayer = MediaPlayer.create(mContextListener, path);
-        } else {
+        } else if (fileMusic != null) {
+            path = Uri.parse(fileMusic.getPath());
+            mMediaPlayer = MediaPlayer.create(mContextListener, path);
+        } else if (mRawList != null) {
             index = 0;
             path = Uri.parse("android.resource://" + mContextListener.getPackageName() + "/" + mRawList.get(index));
             mMediaPlayer = MediaPlayer.create(mContextListener, path);
+        } else if (listFileMusic != null) {
+            index = 0;
+            path = Uri.parse(listFileMusic[index].getPath());
+            mMediaPlayer = MediaPlayer.create(mContextListener, path);
+        } else {
+            Toast.makeText(mContextListener, "Please Add Music !!!", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -65,6 +97,7 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
             if (!cropCircleImage) {
                 Glide.with(mContext)
                         .load(imByte)
+                        .crossFade()
                         .placeholder(placeHolder)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(imCover);
@@ -75,7 +108,9 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
     }
 
     private void setBitmapImageCoverCircle(Context mContext, int placeHolder, ImageView imCover, byte[] byteImage) {
-        Glide.with(mContext).load(byteImage).centerCrop()
+        Glide.with(mContext)
+                .load(byteImage)
+                .centerCrop()
                 .crossFade()
                 .bitmapTransform(new CropCircleTransformation(mContext))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -103,6 +138,14 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
     @Override
     public void OnMusicNextListener() {
         if (mRawList != null) {
+            FunctionNextGenerator(mRawList, null);
+        } else if (listFileMusic != null) {
+            FunctionNextGenerator(null, listFileMusic);
+        }
+    }
+
+    private void FunctionNextGenerator(ArrayList<Integer> listMusic, File[] listFileMusic) {
+        if (listMusic != null) {
             index++;
             if (index < mRawList.size()) {
                 Log.d("index", String.valueOf(index) + ":" + String.valueOf(mRawList.size()));
@@ -127,12 +170,46 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
                     e.printStackTrace();
                 }
             }
+        } else if (listFileMusic != null) {
+            index++;
+            if (index < listFileMusic.length) {
+                path = Uri.parse(listFileMusic[index].getPath());
+                mMediaPlayer.reset();
+                try {
+                    mMediaPlayer.setDataSource(mContextListener, path);
+                    mMediaPlayer.prepare();
+                    mMediaPlayer.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                index = 0;
+                path = Uri.parse(listFileMusic[index].getPath());
+                mMediaPlayer.reset();
+                try {
+                    mMediaPlayer.setDataSource(mContextListener, path);
+                    mMediaPlayer.prepare();
+                    mMediaPlayer.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            Toast.makeText(mContextListener, "This is SinglePlayer", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void OnMusicPrevListener() {
         if (mRawList != null) {
+            FunctionPrevGenerator(mRawList, null);
+        } else if (listFileMusic != null) {
+            FunctionPrevGenerator(null, listFileMusic);
+        }
+    }
+
+    private void FunctionPrevGenerator(ArrayList<Integer> listMusic, File[] listFileMusic) {
+        if (listMusic != null) {
             index--;
             if (index >= 0 && index < mRawList.size()) {
                 path = Uri.parse("android.resource://" + mContextListener.getPackageName() + "/" + mRawList.get(index));
@@ -156,6 +233,32 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
                     e.printStackTrace();
                 }
             }
+        } else if (listFileMusic != null) {
+            index--;
+            if (index >= 0 && index < listFileMusic.length) {
+                path = Uri.parse(listFileMusic[index].getPath());
+                mMediaPlayer.reset();
+                try {
+                    mMediaPlayer.setDataSource(mContextListener, path);
+                    mMediaPlayer.prepare();
+                    mMediaPlayer.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                index = 0;
+                path = Uri.parse(listFileMusic[index].getPath());
+                mMediaPlayer.reset();
+                try {
+                    mMediaPlayer.setDataSource(mContextListener, path);
+                    mMediaPlayer.prepare();
+                    mMediaPlayer.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            Toast.makeText(mContextListener, "This is Play First Music", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.dev.ipati.musicplayerlibrary;
 
 import android.media.MediaPlayer;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,12 +11,13 @@ import android.widget.ProgressBar;
 
 import com.dev.ipati.smartMusicPlayerLibrary.SmartMediaPlayer;
 
+import java.io.File;
+
 
 public class MainActivity extends AppCompatActivity {
     SmartMediaPlayer smartMediaPlayer;
     MediaPlayer mMediaPlayer;
     Button mPlay, mPause, mNext, mPrev;
-    ProgressBar mProgressbar;
     ImageView imAlbum;
 
     @Override
@@ -27,13 +29,15 @@ public class MainActivity extends AppCompatActivity {
         mNext = (Button) findViewById(R.id.bt_next);
         mPrev = (Button) findViewById(R.id.bt_prev);
         imAlbum = (ImageView) findViewById(R.id.im_album);
-        mProgressbar = (ProgressBar) findViewById(R.id.pb_progressbar);
 
-        smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, R.raw.magic);
+        smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, R.raw.labanoon);
         mPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                smartMediaPlayer.setBitmapImageCover(getApplicationContext(), R.mipmap.ic_launcher, imAlbum, true);
+                smartMediaPlayer.setBitmapImageCover(getApplicationContext()
+                        , R.mipmap.ic_launcher, imAlbum
+                        , true);
+
                 smartMediaPlayer.OnMusicStartListener();
             }
         });

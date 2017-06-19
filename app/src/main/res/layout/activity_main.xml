@@ -6,34 +6,15 @@
     android:orientation="vertical"
     tools:context="com.dev.ipati.musicplayerlibrary.MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/im_custom_progressbar"
+
+    <ImageView
+        android:id="@+id/im_album"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_gravity="center">
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_margin="5dp" />
 
-        <ImageView
-            android:id="@+id/im_album"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:layout_margin="5dp" />
-
-        <ProgressBar
-            android:id="@+id/pb_progressbar"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:background="@drawable/background_progressbar"
-            android:indeterminate="false"
-            android:max="100"
-            android:progress="50"
-            android:progressDrawable="@drawable/progressbar_circle" />
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,10 +47,12 @@
         <Button
             android:id="@+id/bt_next"
             android:layout_width="0dp"
+
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="next" />
 
     </LinearLayout>
+
 
 </LinearLayout>

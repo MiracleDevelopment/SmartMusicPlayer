@@ -60,7 +60,8 @@ File / Integer|  SoureMusic
                         , true);
  ````
  #### And you need to pass Parameter is Context, PlaceHolder , imageView, cropCirclePhoto is boolean ####
-     Parameter    |  Type
+ 
+Parameter         |  Type
 ---------------   | ------------------
 mContext          | Context
 Integer / Drawable| PlaceHolder

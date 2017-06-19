@@ -16,7 +16,7 @@
 </dependency> 
  ````
 
-#### Now the last update java codeing and nothing xml file !!! ####
+#### Now the last update java coding and nothing xml file !!! ####
 #### Start Used ####
 #### You can call class SmartMediaPlayer is local variable ####
  ````
@@ -30,7 +30,7 @@ Parameter     | Type
 --------------| ---------
 mContext      |  Context
 mMediaPlayer  |  MediaPlayer
-File / Integer|  SoureMusic
+File / Integer|  SourceMusic
 
 #### Function Start , Pause , Next , Prev ####
 #### Start You can call method OnMusicStartListener(); ####

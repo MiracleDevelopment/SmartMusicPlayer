@@ -1,14 +1,9 @@
 package com.dev.ipati.smartMusicPlayerLibrary;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -26,13 +21,17 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
     private MediaPlayer mMediaPlayer;
     private Context mContextListener;
-    private Activity mActivity;
     private ArrayList<Integer> mRawList;
     private File fileMusic;
-    private File[] listFileMusic;
+    private ArrayList<File> listFileMusic;
     private Integer mRaw;
     private Uri path;
     private int index;
+
+    //Todo:Parameter when Next and Prev
+    private boolean cropCircleImage;
+    private ImageView mImageCover;
+    private Integer placeHolder;
 
     //Todo:Single Player
     public SmartMediaPlayer(Context mContext, MediaPlayer mp, Integer startAtMusic) {
@@ -59,12 +58,13 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
     }
 
     //Todo:MultiPlayerInDevice
-    public SmartMediaPlayer(Context mContext, MediaPlayer mp, File[] listFileMusic) {
+    public SmartMediaPlayer(Context mContext, MediaPlayer mp, ArrayList<File> listFileMusic, boolean state) {
         this.mContextListener = mContext;
         this.mMediaPlayer = mp;
         this.listFileMusic = listFileMusic;
         onStandByListener();
     }
+
 
     //Todo:Loading Standby
     private void onStandByListener() {
@@ -80,7 +80,7 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
             mMediaPlayer = MediaPlayer.create(mContextListener, path);
         } else if (listFileMusic != null) {
             index = 0;
-            path = Uri.parse(listFileMusic[index].getPath());
+            path = Uri.parse(listFileMusic.get(index).getPath());
             mMediaPlayer = MediaPlayer.create(mContextListener, path);
         } else {
             Toast.makeText(mContextListener, "Please Add Music !!!", Toast.LENGTH_SHORT).show();
@@ -88,12 +88,17 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
 
     }
 
+
     //Todo:ImageCoverDiskGlide
     public void setBitmapImageCover(Context mContext, int placeHolder, ImageView imCover, boolean cropCircleImage) {
-        MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
-        mRetriever.setDataSource(mContext, path);
-        byte[] imByte = mRetriever.getEmbeddedPicture();
-        if (imCover.getDrawable() == null) {
+        if (imCover != null) {
+            this.cropCircleImage = cropCircleImage;
+            this.mImageCover = imCover;
+            this.placeHolder = placeHolder;
+            MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+            mRetriever.setDataSource(mContext, path);
+            byte[] imByte = mRetriever.getEmbeddedPicture();
+
             if (!cropCircleImage) {
                 Glide.with(mContext)
                         .load(imByte)
@@ -105,6 +110,7 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
                 setBitmapImageCoverCircle(mContext, placeHolder, imCover, imByte);
             }
         }
+
     }
 
     private void setBitmapImageCoverCircle(Context mContext, int placeHolder, ImageView imCover, byte[] byteImage) {
@@ -139,12 +145,13 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
     public void OnMusicNextListener() {
         if (mRawList != null) {
             FunctionNextGenerator(mRawList, null);
+
         } else if (listFileMusic != null) {
             FunctionNextGenerator(null, listFileMusic);
         }
     }
 
-    private void FunctionNextGenerator(ArrayList<Integer> listMusic, File[] listFileMusic) {
+    private void FunctionNextGenerator(ArrayList<Integer> listMusic, ArrayList<File> listFileMusic) {
         if (listMusic != null) {
             index++;
             if (index < mRawList.size()) {
@@ -155,6 +162,7 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
                     mMediaPlayer.setDataSource(mContextListener, path);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
+                    setImageContinueButton(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -166,30 +174,33 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
                     mMediaPlayer.setDataSource(mContextListener, path);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
+                    setImageContinueButton(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         } else if (listFileMusic != null) {
             index++;
-            if (index < listFileMusic.length) {
-                path = Uri.parse(listFileMusic[index].getPath());
+            if (index < listFileMusic.size()) {
+                path = Uri.parse(listFileMusic.get(index).getPath());
                 mMediaPlayer.reset();
                 try {
                     mMediaPlayer.setDataSource(mContextListener, path);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
+                    setImageContinueButton(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
                 index = 0;
-                path = Uri.parse(listFileMusic[index].getPath());
+                path = Uri.parse(listFileMusic.get(index).getPath());
                 mMediaPlayer.reset();
                 try {
                     mMediaPlayer.setDataSource(mContextListener, path);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
+                    setImageContinueButton(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -208,7 +219,7 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
         }
     }
 
-    private void FunctionPrevGenerator(ArrayList<Integer> listMusic, File[] listFileMusic) {
+    private void FunctionPrevGenerator(ArrayList<Integer> listMusic, ArrayList<File> listFileMusic) {
         if (listMusic != null) {
             index--;
             if (index >= 0 && index < mRawList.size()) {
@@ -218,6 +229,7 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
                     mMediaPlayer.setDataSource(mContextListener, path);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
+                    setImageContinueButton(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -229,30 +241,33 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
                     mMediaPlayer.setDataSource(mContextListener, path);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
+                    setImageContinueButton(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         } else if (listFileMusic != null) {
             index--;
-            if (index >= 0 && index < listFileMusic.length) {
-                path = Uri.parse(listFileMusic[index].getPath());
+            if (index >= 0 && index < listFileMusic.size()) {
+                path = Uri.parse(listFileMusic.get(index).getPath());
                 mMediaPlayer.reset();
                 try {
                     mMediaPlayer.setDataSource(mContextListener, path);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
+                    setImageContinueButton(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
                 index = 0;
-                path = Uri.parse(listFileMusic[index].getPath());
+                path = Uri.parse(listFileMusic.get(index).getPath());
                 mMediaPlayer.reset();
                 try {
                     mMediaPlayer.setDataSource(mContextListener, path);
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
+                    setImageContinueButton(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -260,5 +275,32 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
         } else {
             Toast.makeText(mContextListener, "This is Play First Music", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setImageContinueButton(Uri path) {
+        if (mImageCover != null) {
+            MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+            mRetriever.setDataSource(mContextListener, path);
+            byte[] imByte = mRetriever.getEmbeddedPicture();
+
+            if (!cropCircleImage) {
+                Glide.with(mContextListener)
+                        .load(imByte)
+                        .crossFade()
+                        .placeholder(placeHolder)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(mImageCover);
+            } else {
+                setBitmapImageCoverCircle(mContextListener, placeHolder, mImageCover, imByte);
+            }
+        }
+    }
+
+    public MediaPlayer getmMediaPlayer() {
+        return mMediaPlayer;
+    }
+
+    public ImageView getmImageCover() {
+        return mImageCover;
     }
 }

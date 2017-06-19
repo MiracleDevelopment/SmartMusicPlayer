@@ -1,3 +1,5 @@
-<h1><B>Tutorial SmartMusicPlayer alpha 0.1.2 Beta</B><h2>
-<h4>This is smartMusicPlayer Library. this Library make you intelligent when you create Application Android about MusicPlayer because you can
-Controller Start , Stop ,Pause and Reset so easy then you can make app fasted.</h4>
+# Tutorial SmartMusicPlayer alpha 0.1.2 Beta #
+![picture alt](http://www.brightlightpictures.com/assets/images/portfolio/thethaw_header.jpg )
+#### This Library smartMusicPlayer is library has been extend from musicplayer. I have myidea to custom reuse function as easy for use and public give other developer android try to use and i hope you enjoy with myLibrary ####
+- - - -
+

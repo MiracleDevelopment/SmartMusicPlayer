@@ -8,12 +8,12 @@
 `compile 'com.miraclelab:SmartMusicPlayer:0.1.3'`
 ### OR maven ###
  ````
- <dependency>
+<dependency>
   <groupId>com.miraclelab</groupId>
   <artifactId>SmartMusicPlayer</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
   <type>pom</type>
-</dependency> 
+</dependency>
  ````
 
 #### Now the last update java coding and nothing xml file !!! ####

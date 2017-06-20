@@ -34,10 +34,10 @@
   ````
   smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, File fileMusic);
  ````
- #### Support File[] ####
+ #### Support ArrayList<File> ####
  #### When you Use File[] you need pass parameter boolean is true always!!! ####
  ````
-  smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, ArrayList<File> listFileMusic, boolean state);
+  smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, ArrayList<File> listFileMusic, boolean usedState);
  ````
 Parameter     | Type
 --------------| ---------

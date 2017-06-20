@@ -5,13 +5,13 @@
 ## User Guide ##
 ### First SetUp ###
 ### you should add dependency in build.gradle level app ###
-`compile 'com.miraclelab:SmartMusicPlayer:0.1.3'`
+`compile 'com.miraclelab:SmartMusicPlayer:0.1.4'`
 ### OR maven ###
  ````
 <dependency>
   <groupId>com.miraclelab</groupId>
   <artifactId>SmartMusicPlayer</artifactId>
-  <version>0.1.3</version>
+  <version>0.1.4</version>
   <type>pom</type>
 </dependency>
  ````
@@ -31,7 +31,7 @@
   smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, ArrayList<Integer> Raw);
  ````
  #### Support File Type ####
-  ````
+ ````
   smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, File fileMusic);
  ````
  #### Support ArrayList ####

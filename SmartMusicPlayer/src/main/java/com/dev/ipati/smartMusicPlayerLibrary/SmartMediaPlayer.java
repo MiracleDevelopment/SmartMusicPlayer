@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -58,11 +59,13 @@ public class SmartMediaPlayer implements OnSmartListenerMediaPlayer {
     }
 
     //Todo:MultiPlayerInDevice
-    public SmartMediaPlayer(Context mContext, MediaPlayer mp, ArrayList<File> listFileMusic, boolean state) {
-        this.mContextListener = mContext;
-        this.mMediaPlayer = mp;
-        this.listFileMusic = listFileMusic;
-        onStandByListener();
+    public SmartMediaPlayer(Context mContext, MediaPlayer mMediaPlayer, ArrayList<File> listMusic, boolean usedState) {
+        if (usedState) {
+            this.mContextListener = mContext;
+            this.mMediaPlayer = mMediaPlayer;
+            this.listFileMusic = listMusic;
+            onStandByListener();
+        }
     }
 
 

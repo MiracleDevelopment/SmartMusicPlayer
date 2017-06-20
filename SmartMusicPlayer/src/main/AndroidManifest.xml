@@ -4,7 +4,7 @@
 
     <application>
         <meta-data
-            android:name="com.dev.ipati.smartMusicPlayerLibrary.GlideModule"
+            android:name="com.dev.ipati.smartMusicPlayerLibrary.GlideConfig"
             android:value="GlideModule">
 
         </meta-data>

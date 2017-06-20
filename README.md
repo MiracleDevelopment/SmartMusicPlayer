@@ -1,11 +1,11 @@
-# Tutorial SmartMusicPlayer alpha 0.1.2 Beta #
+# Tutorial SmartMusicPlayer 0.1.3 Beta #
 ![a4104e9fb893882633276a1612987983.jpg](https://www.img.in.th/images/a4104e9fb893882633276a1612987983.jpg)
 #### This Library smartMusicPlayer is library has been extend from musicplayer. I have myidea to custom reuse function as easy for use and public give other developer android try to use and i hope you enjoy with myLibrary ####
 - - - -
 ## User Guide ##
 ### First SetUp ###
 ### you should add dependency in build.gradle level app ###
-`compile 'com.miraclelab:SmartMusicPlayer:0.1.2'`
+`compile 'com.miraclelab:SmartMusicPlayer:0.1.3'`
 ### OR maven ###
  ````
  <dependency>
@@ -25,6 +25,19 @@
 #### When you use. You need to new Object and pass parameter ####
  ````
   smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, R.raw.labanoon);
+ ````
+ #### Support List Music ####
+ ````
+  smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, ArrayList<Integer> Raw);
+ ````
+ #### Support File Type ####
+  ````
+  smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, File fileMusic);
+ ````
+ #### Support File[] ####
+ #### When you Use File[] you need pass parameter boolean is true always!!! ####
+ ````
+  smartMediaPlayer = new SmartMediaPlayer(getApplicationContext(), mMediaPlayer, ArrayList<File> listFileMusic, boolean state);
  ````
 Parameter     | Type
 --------------| ---------
